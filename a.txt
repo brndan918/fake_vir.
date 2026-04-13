@@ -1,2 +1,3 @@
+chcp 65001> nul
 powershell
 if (Get-Command scoop -ErrorAction SilentlyContinue) { Write-Output "✅ Scoop 已安裝" } else { Write-Output "❌ 未安裝，開始安裝..." ; iwr -useb https://get.scoop.sh | iex ; if (Get-Command scoop -ErrorAction SilentlyContinue) { Write-Output "✅ Scoop 安裝成功" } else { Write-Output "❌ Scoop 安裝失敗" } }
