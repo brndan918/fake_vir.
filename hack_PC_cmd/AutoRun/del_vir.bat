@@ -1,5 +1,3 @@
-@echo off
-chcp 65001> nul
 powershell
 # 使用 UTF-8 編碼（對中文輸出較穩定）
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
