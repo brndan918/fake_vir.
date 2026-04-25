@@ -3,20 +3,8 @@ chcp 65001 > nul
 
 set "STARTUP=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\auto_host.vbs"
 
-if exist "%STARTUP%" (
-    del /f /q "%STARTUP%"
-    echo 已刪除：%STARTUP%
-) else (
-    echo 不存在：%STARTUP%
-)
-
-cd /d %TEMP%
+del /f /q "%STARTUP%"
 
 set "TARGET=C:\uptm"
 
-if exist "%TARGET%" (
-    rmdir /s /q "%TARGET%"
-    echo 已刪除：%TARGET%
-) else (
-    echo 不存在：%TARGET%
-)
+rmdir /s /q "%TARGET%"
