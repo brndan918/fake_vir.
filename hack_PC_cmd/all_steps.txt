@@ -17,6 +17,27 @@ if (Get-Command upterm -ErrorAction SilentlyContinue) {
     scoop install upterm
 }
 
+# 2.5 Generate SSH Key for Upterm (if not exists)
+$sshDir = "$env:USERPROFILE\.ssh"
+$privateKey = "$sshDir\id_rsa"
+$publicKey = "$sshDir\id_rsa.pub"
+
+if (!(Test-Path $privateKey)) {
+    Write-Host "Generating SSH key..."
+
+    if (!(Test-Path $sshDir)) {
+        New-Item -ItemType Directory -Path $sshDir -Force | Out-Null
+    }
+
+    ssh-keygen -t rsa -b 4096 -f $privateKey -N "" -q
+
+    Write-Host "SSH key generated:"
+    Write-Host "Private Key: $privateKey"
+    Write-Host "Public Key: $publicKey"
+} else {
+    Write-Host "SSH key already exists."
+}
+
 # 3. Create Directory
 $dir = "C:\uptm"
 if (!(Test-Path $dir)) {
