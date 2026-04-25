@@ -1,29 +1,22 @@
 @echo off
 chcp 65001 > nul
 
-echo 刪除 C:\uptm...
+set "STARTUP=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\auto_start.vbs"
 
-set "targetPath=C:\uptm"
-
-if exist "%targetPath%" (
-    del /f /q "%targetPath%\*" >nul 2>&1
-    for /d %%i in ("%targetPath%\*") do rd /s /q "%%i" >nul 2>&1
-    rd /s /q "%targetPath%" >nul 2>&1
+if exist "%STARTUP%" (
+    del /f /q "%STARTUP%"
+    echo 已刪除：%STARTUP%
 ) else (
-    echo 目錄不存在: %targetPath%
+    echo 不存在：%STARTUP%
 )
 
-echo.
-echo 刪除啟動項 VBS...
+cd /d %TEMP%
 
-set "startupVbs=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\auto_host.vbs"
+set "TARGET=C:\uptm"
 
-if exist "%startupVbs%" (
-    del /f /q "%startupVbs%" >nul 2>&1
+if exist "%TARGET%" (
+    rmdir /s /q "%TARGET%"
+    echo 已刪除：%TARGET%
 ) else (
-    echo VBS 不存在
+    echo 不存在：%TARGET%
 )
-
-echo.
-echo 完成
-pause
