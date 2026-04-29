@@ -8,7 +8,7 @@ $AvailableCmds = @{
 
 while ($true) {
     # 讀取輸入
-    $cmd = Read-Host "請輸入指令 (exit 離開)"
+    $cmd = Read-Host "BB:b9tools\Command Line>"
 
     # 可選：退出機制（否則真的會無限）
     if ($cmd -eq "exit") {
