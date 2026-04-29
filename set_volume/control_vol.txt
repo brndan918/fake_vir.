@@ -1,0 +1,41 @@
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
+# 檢查 nircmd 是否存在
+if (Get-Command nircmd -ErrorAction SilentlyContinue) {
+    Write-Host "NirCmd is already installed."
+} else {
+    Write-Host "NirCmd not found. Installing via Scoop..."
+    
+    scoop bucket add extras 2>$null
+    scoop install nircmd
+}
+
+# NirCmd 路徑
+$path = "$env:USERPROFILE\scoop\apps\nircmd\current\nircmd.exe"
+
+# 使用者輸入
+$inputValue = Read-Host "請輸入音量值 (0~65535 或 on/off)"
+
+# 判斷輸入
+if ($inputValue -match "^(on|off)$") {
+    if ($inputValue -eq "on") {
+        & $path mutesysvolume 0
+        Write-Host "已取消靜音"
+    } else {
+        & $path mutesysvolume 1
+        Write-Host "已靜音"
+    }
+}
+elseif ($inputValue -match "^\d+$") {
+    $volume = [int]$inputValue
+
+    if ($volume -ge 0 -and $volume -le 65535) {
+        & $path setsysvolume $volume
+        Write-Host "音量已設定為 $volume"
+    } else {
+        Write-Host "數值錯誤：請輸入 0 ~ 65535"
+    }
+}
+else {
+    Write-Host "輸入錯誤：請輸入數字或 on/off"
+}
