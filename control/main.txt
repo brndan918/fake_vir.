@@ -1,30 +1,66 @@
-# 設定 UTF-8
+# UTF-8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-# 指令表 (dict)
 $AvailableCmds = @{
-    "vol"  = "https://example.com/volume.ps1"
+    "volume" = @{
+        url  = "https://example.com/volume.ps1"
+        func = "Set-Volume"
+        args = @{
+            value = "這裡要輸入數字"
+        }
+    }
 }
 
 while ($true) {
-    # 讀取輸入
-    $cmd = Read-Host "BB:b9tools\Command Line>"
 
-    # 可選：退出機制（否則真的會無限）
-    if ($cmd -eq "exit") {
+    $cmdInput = Read-Host "BB:b9tools\Command Line>"
+
+    if ($cmdInput -eq "exit") {
         Write-Host "已退出"
         break
     }
 
-    # 比對並執行
+    # ===== parse =====
+    $parts = $cmdInput -split " "
+    $cmd = $parts[0]
+    $argsInput = $parts[1..($parts.Length-1)]
+
     if ($AvailableCmds.ContainsKey($cmd)) {
-        $url = $AvailableCmds[$cmd]
-        
+
+        $entry = $AvailableCmds[$cmd]
+        $url   = $entry.url
+        $func  = $entry.func
+        $argDef = $entry.args
+
+        # ===== 1. args 檢查 =====
+        if (-not $argsInput -or $argsInput.Count -eq 0 -or [string]::IsNullOrWhiteSpace($argsInput[0])) {
+
+            foreach ($k in $argDef.Keys) {
+                Write-Host "$k 參數錯誤: $($argDef[$k])"
+            }
+            continue
+        }
+
         try {
-            iex (iwr $url -UseBasicParsing)
+            # ===== 2. download script =====
+            $scriptText = (iwr $url -UseBasicParsing).Content
+
+            # ===== 3. load function =====
+            . ([scriptblock]::Create($scriptText))
+
+            # ===== 4. call function =====
+            if (Get-Command $func -ErrorAction SilentlyContinue) {
+
+                & $func @argsInput
+
+            } else {
+                Write-Host "找不到 function: $func"
+            }
+
         } catch {
             Write-Host "執行失敗: $_"
         }
+
     } else {
         Write-Host "找不到該指令"
     }
