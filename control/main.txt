@@ -46,8 +46,6 @@ foreach ($cmd in $AvailableCmds.Keys) {
     }
 }
 
-cls
-
 # ================= CLI =================
 while ($true) {
 
