@@ -24,8 +24,6 @@ $AvailableCmds = @{
 $LocalFunctions = @{}
 
 # ================= 啟動時預載 =================
-Write-Host "Loading plugins..."
-
 foreach ($cmd in $AvailableCmds.Keys) {
 
     $entry = $AvailableCmds[$cmd]
@@ -42,20 +40,18 @@ foreach ($cmd in $AvailableCmds.Keys) {
         # 存入 local registry
         $LocalFunctions[$entry.func] = $true
 
-        Write-Host "Loaded: $($entry.func)"
 
     } catch {
         Write-Host "Failed to load $cmd : $_"
     }
 }
 
-Write-Host "Ready."
 cls
 
 # ================= CLI =================
 while ($true) {
 
-    $cmdInput = Read-Host "BB:b9tools\Command Line>"
+    $cmdInput = Read-Host "B:\b9tools\Command Line>"
 
     if ($cmdInput -eq "exit") {
         break
