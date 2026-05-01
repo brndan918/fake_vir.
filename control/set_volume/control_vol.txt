@@ -1,59 +1,63 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+function Set-Volume {
+    param(
+        [Parameter(Position=0)]
+        [string]$inputValue
+    )
 
-# NirCmd 路徑（固定用這個，避免 PATH 問題）
-$path = "$env:USERPROFILE\scoop\apps\nircmd\current\nircmd.exe"
+    # ===== 基本工具路徑（你原本的 $path）=====
+    # 請自行替換
+    $path = "$env:USERPROFILE\scoop\apps\nircmd\current\nircmd.exe"   # 或你的音量控制工具
 
-# 如果不存在就安裝
-if (!(Test-Path $path)) {
-    Write-Host "NirCmd not found. Installing via Scoop..."
-    scoop bucket add extras 2>$null
-    scoop install nircmd
-}
-
-# 使用者輸入
-$inputValue = Read-Host "請輸入音量 (0~65535 / 0~100% / on/off)"
-
-# 統一小寫
-$inputValue = $inputValue.ToLower()
-
-# ========= 判斷邏輯 =========
-
-# 1️⃣ 靜音控制
-if ($inputValue -eq "on") {
-    & $path mutesysvolume 0
-    Write-Host "已取消靜音"
-}
-elseif ($inputValue -eq "off") {
-    & $path mutesysvolume 1
-    Write-Host "已靜音"
-}
-
-# 2️⃣ 百分比（例如 50%）
-elseif ($inputValue -match "^\d+%$") {
-    $percent = [int]($inputValue -replace "%","")
-
-    if ($percent -ge 0 -and $percent -le 100) {
-        $realVolume = [int]($percent / 100 * 65535)
-        & $path setsysvolume $realVolume
-        Write-Host "音量已設定為 $percent% ($realVolume)"
-    } else {
-        Write-Host "百分比錯誤：請輸入 0~100%"
+    # ===== 1️⃣ 靜音控制 =====
+    if ($inputValue -eq "on") {
+        & $path mutesysvolume 0
+        Write-Host "已取消靜音"
+        return
     }
-}
 
-# 3️⃣ 數字（0~65535）
-elseif ($inputValue -match "^\d+$") {
-    $volume = [int]$inputValue
-
-    if ($volume -ge 0 -and $volume -le 65535) {
-        & $path setsysvolume $volume
-        Write-Host "音量已設定為 $volume"
-    } else {
-        Write-Host "數值錯誤：請輸入 0~65535"
+    elseif ($inputValue -eq "off") {
+        & $path mutesysvolume 1
+        Write-Host "已靜音"
+        return
     }
-}
 
-# 4️⃣ 其他輸入
-else {
-    Write-Host "輸入錯誤：請輸入 0~65535 / 0~100% / on/off"
+    # ===== 2️⃣ 百分比（0~100%）=====
+    elseif ($inputValue -match "^\d+%$") {
+
+        $percent = [int]($inputValue -replace "%","")
+
+        if ($percent -ge 0 -and $percent -le 100) {
+
+            $realVolume = [int]($percent / 100 * 65535)
+            & $path setsysvolume $realVolume
+
+            Write-Host "音量已設定為 $percent% ($realVolume)"
+        }
+        else {
+            Write-Host "百分比錯誤：請輸入 0~100%"
+        }
+
+        return
+    }
+
+    # ===== 3️⃣ 純數字（0~65535）=====
+    elseif ($inputValue -match "^\d+$") {
+
+        $volume = [int]$inputValue
+
+        if ($volume -ge 0 -and $volume -le 65535) {
+            & $path setsysvolume $volume
+            Write-Host "音量已設定為 $volume"
+        }
+        else {
+            Write-Host "數值錯誤：請輸入 0~65535"
+        }
+
+        return
+    }
+
+    # ===== 4️⃣ 其他輸入 =====
+    else {
+        Write-Host "輸入錯誤：請輸入 0~65535 / 0~100% / on/off"
+    }
 }

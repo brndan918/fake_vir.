@@ -1,12 +1,28 @@
 # UTF-8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
+# ================= 安裝必要套件 =================
+
+# NirCmd 路徑（固定用這個，避免 PATH 問題）
+$path = "$env:USERPROFILE\scoop\apps\nircmd\current\nircmd.exe"
+
+# 如果不存在就安裝
+if (!(Test-Path $path)) {
+    Write-Host "NirCmd not found. Installing via Scoop..."
+    scoop bucket add extras 2>$null
+    scoop install nircmd
+}
+
+
+
+# ================= 啟動流程 =================
+
 $AvailableCmds = @{
     "volume" = @{
         url  = "https://example.com/volume.ps1"
         func = "Set-Volume"
         args = @{
-            value = "這裡要輸入數字"
+            value = "這裡只能輸入 on/off 1~100% 或 0~65536"
         }
     }
 }
