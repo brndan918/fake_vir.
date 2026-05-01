@@ -1,3 +1,8 @@
+function Get-Volume {
+    $path = "$env:USERPROFILE\scoop\apps\nircmd\current\nircmd.exe"
+    return [int](& $path getsysvolume)
+}
+
 function Set-Volume {
     param(
         [Parameter(Position=0)]
@@ -25,22 +30,27 @@ function Set-Volume {
         $isPercent = $inputValue -like "*%"
         $value = [int]($inputValue -replace "%","")
 
+        $current = Get-Volume
+
         if ($isPercent) {
-            # 以 65535 為基準換算
             $delta = [int](65535 * ($value / 100))
         }
         else {
-            # 直接增減 raw volume
             $delta = $value
         }
 
-        & $path changesysvolume $delta
+        $newVolume = [math]::Max(0, [math]::Min(65535, $current + $delta))
+
+        & $path setsysvolume $newVolume
+
+        $percent = [math]::Round($newVolume / 65535 * 100, 1)
 
         Write-Host "音量變化：$inputValue"
+        Write-Host "目前音量：$percent% ($newVolume / 65535)"
         return
     }
 
-    # ===== 3️⃣ 百分比（0~100%）=====
+    # ===== 3️⃣ 百分比 =====
     elseif ($inputValue -match "^\d+%$") {
 
         $percent = [int]($inputValue -replace "%","")
@@ -50,7 +60,7 @@ function Set-Volume {
             $realVolume = [int]($percent / 100 * 65535)
             & $path setsysvolume $realVolume
 
-            Write-Host "音量已設定為 $percent% ($realVolume)"
+            Write-Host "音量已設定為 $percent% ($realVolume / 65535)"
         }
         else {
             Write-Host "百分比錯誤：請輸入 0~100%"
@@ -59,14 +69,17 @@ function Set-Volume {
         return
     }
 
-    # ===== 4️⃣ 純數字（0~65535）=====
+    # ===== 4️⃣ 純數字 =====
     elseif ($inputValue -match "^\d+$") {
 
         $volume = [int]$inputValue
 
         if ($volume -ge 0 -and $volume -le 65535) {
+            $percent = [math]::Round($volume / 65535 * 100, 1)
+
             & $path setsysvolume $volume
-            Write-Host "音量已設定為 $volume"
+
+            Write-Host "音量已設定：$percent% ($volume / 65535)"
         }
         else {
             Write-Host "數值錯誤：請輸入 0~65535"
