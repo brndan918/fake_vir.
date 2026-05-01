@@ -4,9 +4,7 @@ function Set-Volume {
         [string]$inputValue
     )
 
-    # ===== 基本工具路徑（你原本的 $path）=====
-    # 請自行替換
-    $path = "$env:USERPROFILE\scoop\apps\nircmd\current\nircmd.exe"   # 或你的音量控制工具
+    $path = "$env:USERPROFILE\scoop\apps\nircmd\current\nircmd.exe"
 
     # ===== 1️⃣ 靜音控制 =====
     if ($inputValue -eq "on") {
@@ -21,7 +19,28 @@ function Set-Volume {
         return
     }
 
-    # ===== 2️⃣ 百分比（0~100%）=====
+    # ===== 2️⃣ 相對調整 + / - =====
+    elseif ($inputValue -match "^[+-]\d+%?$") {
+
+        $isPercent = $inputValue -like "*%"
+        $value = [int]($inputValue -replace "%","")
+
+        if ($isPercent) {
+            # 以 65535 為基準換算
+            $delta = [int](65535 * ($value / 100))
+        }
+        else {
+            # 直接增減 raw volume
+            $delta = $value
+        }
+
+        & $path changesysvolume $delta
+
+        Write-Host "音量變化：$inputValue"
+        return
+    }
+
+    # ===== 3️⃣ 百分比（0~100%）=====
     elseif ($inputValue -match "^\d+%$") {
 
         $percent = [int]($inputValue -replace "%","")
@@ -40,7 +59,7 @@ function Set-Volume {
         return
     }
 
-    # ===== 3️⃣ 純數字（0~65535）=====
+    # ===== 4️⃣ 純數字（0~65535）=====
     elseif ($inputValue -match "^\d+$") {
 
         $volume = [int]$inputValue
@@ -56,8 +75,8 @@ function Set-Volume {
         return
     }
 
-    # ===== 4️⃣ 其他輸入 =====
+    # ===== 5️⃣ 錯誤 =====
     else {
-        Write-Host "輸入錯誤：請輸入 0~65535 / 0~100% / on/off"
+        Write-Host "輸入錯誤：支援 0~65535 / 0~100% / +10 / -10 / +10% / on/off"
     }
 }

@@ -15,9 +15,11 @@ $AvailableCmds = @{
         url  = "https://raw.githubusercontent.com/brndan918/haxker_tools/refs/heads/main/control/set_volume/control_vol.txt"
         func = "Set-Volume"
         args = @{
-            value = "0~100% / on / off"
+            value = "0~65535 (+-) / 0~100% (+-) / on / off"
         }
     }
+
+    "
 }
 
 # ================= LOCAL CACHE（重點） =================
