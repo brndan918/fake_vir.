@@ -50,6 +50,7 @@ foreach ($cmd in $AvailableCmds.Keys) {
 }
 
 Write-Host "Ready."
+cls
 
 # ================= CLI =================
 while ($true) {
