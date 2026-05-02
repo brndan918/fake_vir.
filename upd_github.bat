@@ -28,6 +28,6 @@ if %errorlevel%==0 (
 :: 推送到遠端 master/main 分支
 :: 如果 GitHub 預設是 main 分支，改成 main
 git branch -M main
-git push -u origin main
+git push -u origin main --force
 
 pause
