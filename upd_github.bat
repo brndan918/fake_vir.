@@ -29,5 +29,7 @@ if %errorlevel%==0 (
 :: 如果 GitHub 預設是 main 分支，改成 main
 git branch -M main
 git push -u origin main
+:: 若不行可以使用 --force
+:: git push -u origin main --force
 
 pause
